@@ -73,4 +73,68 @@ def classes_used(course_list):
         course_list = [course_list]
     return "\n".join(get_prereqs_for_courses(course_list))
 
-print(classes_used("cs330"))
+
+def extract_hub(course_name):
+    """
+    Extracts the BU Hub area(s) from a course description.
+    Returns a clean string like 'Quantitative Reasoning II'.
+    """
+    normalized_course = ws.normalize_course(course_name)
+    if not normalized_course:
+        return ""
+
+    description = ws.scrape_course_description(course_name)
+    if not description:
+        return ""
+
+    # Search for the BU Hub phrase
+    match = re.search(
+        r"this course fulfills.*?BU Hub area[s]*:?\s*(.*?)\.",
+        description,
+        re.IGNORECASE | re.DOTALL
+    )
+    if not match:
+        return ""
+
+    hub_text = match.group(1)
+    hub_text = ws.clean_text(hub_text)
+    return hub_text.strip()
+
+# --- Recursive version for multiple courses ---
+def get_hubs_for_courses(course_list, visited=None):
+    """
+    Accepts a course or list of courses.
+    Returns a string of BU Hub areas for each course recursively.
+    """
+    if visited is None:
+        visited = set()
+
+    results = []
+
+    for course in course_list:
+        normalized_course = ws.normalize_course(course)
+        if not normalized_course:
+            results.append(f"{course} (cannot normalize)")
+            continue
+
+        if normalized_course in visited:
+            continue
+        visited.add(normalized_course)
+
+        course_disp = re.sub(r'^CAS', '', normalized_course, flags=re.IGNORECASE)
+        hub_text = extract_hub(course)
+        if hub_text:
+            results.append(f"{course_disp}: {hub_text}")
+        else:
+            results.append(f"{course_disp}: No Hub requirement")
+
+    return "\n".join(results)
+
+# --- Public function ---
+def hubs_used(course_list):
+    if isinstance(course_list, str):
+        course_list = [course_list]
+    return get_hubs_for_courses(course_list)
+
+
+print(hubs_used("cs210"))
