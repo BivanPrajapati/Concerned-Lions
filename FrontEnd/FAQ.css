@@ -1,0 +1,106 @@
+/* === FAQ Page Styling === */
+/* shared css for every page (start) */
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+#page-wrapper{
+    margin:auto;
+    background-color:rgb(45,41,38);
+    height: 100%; /* change if the content exceeds brower's viewport */
+    color:white;
+    font-size:calc(3px+ 1vw);
+    font-family:sans-serif,Serif,Arial;
+    text-align:center;
+
+}
+header{
+    height:10%;
+    text-align: center;
+}
+header h1{
+    position:relative;
+    top:20px;
+}
+#container{
+    display:flex;
+    flex-direction: column;
+    width:100%;
+}
+nav{
+    background-color: rgb(204,0,0);
+
+}
+nav a {
+    float: left;
+    padding: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    text-align: center; /* If you want the text to be centered */
+}
+/* shared css for every page (end) */
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+/* Headings */
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+/* FAQ container */
+#faq {
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+}
+
+/* Each question block */
+details {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+details:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Questions (summary tags) */
+summary {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: #96c4e5; /* cobalt blue */
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+/* Remove default triangle marker style */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Answers */
+details p {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: #fff6b7; /* pale yellow */
+  margin-top: 10px;
+  line-height: 1.5em;
+}
+
+/* Links inside answers */
+details p a {
+  color: #ffd700;
+  text-decoration: underline;
+}
+
+details p a:hover {
+  color: #fff3d0;
+}
