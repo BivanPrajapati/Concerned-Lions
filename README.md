@@ -1,2 +1,2 @@
 # Concerned-Lions
-#Dependencies: requests, BeautifulSoup,  fastapi uvicorn, lxml 
+Dependencies: requests, BeautifulSoup,  fastapi uvicorn, lxml 
