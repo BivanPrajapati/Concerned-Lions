@@ -22,6 +22,8 @@ def normalize_course(course_name):
         return None
 
 def find_class(finding_url):
-    return URL + finding_url + "/"
-
-print(find_class(normalize_course("cs112")))
+    if finding_url != None:
+        return URL + finding_url + "/"
+    else:
+        return None
+    
