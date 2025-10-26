@@ -235,79 +235,80 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
     def add_structure(structure, parent=None):
         if structure is None:
             return
+
+        # If structure is a list with one element, just pass the element
         if isinstance(structure, list):
+            if len(structure) == 1:
+                add_structure(structure[0], parent)
+                return
             structure = ('OR', structure)
+
         if isinstance(structure, tuple):
             logic, items = structure
+            # If tuple has only one item, bypass AND/OR node
+            if len(items) == 1:
+                add_structure(items[0], parent)
+                return
             logic_node = f"{logic}_{len(G.nodes())}"
             G.add_node(logic_node, label=logic)
             if parent:
-                G.add_edge(logic_node, parent)
+                G.add_edge(parent, logic_node)  # parent -> logic
             for item in items:
                 add_structure(item, logic_node)
             return
+
         course = structure
         if course in visited_courses:
             if parent:
-                G.add_edge(course, parent)
+                G.add_edge(parent, course)
             return
         visited_courses.add(course)
         G.add_node(course, label=display_course(course))
         if parent:
-            G.add_edge(course, parent)
+            G.add_edge(parent, course)
+
         prereq_string = extract_prereqs(course)
         if not prereq_string or prereq_string == "COURSE_NOT_FOUND":
             return
+
         logic_structure = parse_prereq_logic(prereq_string)
         if logic_structure:
             add_structure(logic_structure, course)
 
     add_structure(root)
 
-    # --- Classic tree layout with non-overlapping nodes ---
-    def compute_positions(G, root):
-        """
-        Assign positions to nodes such that:
-        - Root is at top center.
-        - Children are spaced evenly according to subtree size.
-        """
+    # --- Compute dynamic hierarchical positions ---
+    def hierarchy_pos(G, root, vert_gap=3.0, x_min=0, x_max=1.0):
         pos = {}
-        def _assign(node, x_min, x_max, depth=0):
-            children = list(G.predecessors(node))
-            pos[node] = ((x_min + x_max) / 2, -depth * 3)  # depth * vertical_gap
-            if not children:
-                return 1  # subtree width = 1
-            # Compute widths of subtrees
-            subtree_widths = []
-            for child in children:
-                width = _assign(child, 0, 0, depth + 1)  # placeholder
-                subtree_widths.append(width)
-            total_width = sum(subtree_widths)
-            # Assign real x positions
-            current_x = x_min
-            for child, width in zip(children, subtree_widths):
-                new_x_min = current_x
-                new_x_max = current_x + width
-                pos[child] = ((new_x_min + new_x_max)/2, - (depth + 1)*3)
-                current_x += width
-            return total_width
 
-        # Estimate full width
-        def get_subtree_width(node):
-            children = list(G.predecessors(node))
+        def subtree_width(node):
+            children = list(G.successors(node))
             if not children:
                 return 1
-            return sum(get_subtree_width(c) for c in children)
+            return sum(subtree_width(c) for c in children)
 
-        total_width = get_subtree_width(root)
-        _assign(root, 0, total_width)
+        def _assign(node, x_left, x_right, depth=0):
+            children = list(G.successors(node))
+            pos[node] = ((x_left + x_right) / 2, -depth * vert_gap)
+            if not children:
+                return
+            total = sum(subtree_width(c) for c in children)
+            current_x = x_left
+            for c in children:
+                w = subtree_width(c)
+                child_x_left = current_x
+                child_x_right = current_x + (x_right - x_left) * (w / total)
+                _assign(c, child_x_left, child_x_right, depth + 1)
+                current_x += (x_right - x_left) * (w / total)
+
+        _assign(root, x_min, x_max)
         return pos
 
-    pos = compute_positions(G, root)
+    pos = hierarchy_pos(G, root)
 
     # --- Draw the graph ---
-    fig_w = max(12, len(G.nodes()) * 1.8)
-    fig_h = max(8, len(G.nodes()) * 1.5)
+    fig_w = max(12, len(G.nodes()) * 1.2)
+    fig_h = max(8, len(G.nodes()) * 1.2)
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
 
     node_labels = nx.get_node_attributes(G, 'label')
@@ -345,5 +346,5 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
 
 
 # --- Example usage ---
-path = visualize_full_prereq_tree("CS365")
+path = visualize_full_prereq_tree("cs581")
 print("Saved tree at:", path)
