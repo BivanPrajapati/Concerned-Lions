@@ -40,62 +40,55 @@ nav a {
     text-align: center; /* If you want the text to be centered */
 }
 /* shared css for every page (end) */
+  .layer {
+    display: flex;
+    gap: 80px;
+    position: relative;
+  }
 
+  .node {
+    background: white;
+    border: 2px solid #4A90E2;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: relative;
+  }
 
-table {
-            width: 60%;
-            height: 100%;
-        }
-        td {
-            border: 0px;
-            position:relative;
-        }
-        #team {
-            padding: 5px;
-            border: 1px solid rgb(232, 223, 223);
-            z-index:999;
-            background:gray;
-        }
-        .dash-front {
-            position:absolute;
-            content:"----------";
-            letter-spacing: -2px;
-            right:-18px;
-            z-index:-999;
-        }
-        .dash-back {
-            position: absolute;
-            content: "----";
-            letter-spacing: -3px;
-            left: -15px;
-            z-index: -999;
-        }
-        #spacer {
-            padding: 5px;
-        }
-        .connecter {
-            border-left: 1px solid rgb(232, 223, 223);
-            /*transform:translateX(18px) scaleY(1.65);*/
-        }
-        td.connecter1{
-            transform-origin: center;
-            transform:translateY(1px) translateX(18px) scaleY(2.05);
-        }
-        td.connecter2{
-            transform-origin: center;
-            transform:translateY(1px) translateX(18px) scaleY(1.34);
-        }
-        td.connecter3{
-            transform-origin: center;
-            transform:translateY(1px) translateX(18px) scaleY(1.15);
-        }
-        td.connecter4{
-            transform-origin: center;
-            transform:translateY(2px) translateX(18px) scaleY(1.07);
-        }
-        #connecter:after {
-            /*content:"------";*/
-            letter-spacing: -2px;
-        }
-        td:first-child .dash-back{display: none;}
-        td:last-child .dash-front{display: none;}
+  /* Draw arrows between layers */
+  .arrow {
+    position: absolute;
+    width: 2px;
+    background: #4A90E2;
+  }
+
+  /* Example arrows (manual placement for small DAG) */
+  .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: -3px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid #4A90E2;
+  }
+
+  .arrow.a1 {
+    height: 60px;
+    left: 30px;
+    top: 60px;
+  }
+  .arrow.a2 {
+    height: 60px;
+    left: 150px;
+    top: 60px;
+  }
+  .arrow.a3 {
+    height: 60px;
+    left: 270px;
+    top: 60px;
+  }
