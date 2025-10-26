@@ -36,6 +36,7 @@ DEPT_MAPPING = {
     'biochemistry & molecular biology': 'bb', 'bb': 'bb', 'BIOCHEMISTRY & MOLECULAR BIOLOGY': 'bb', 'BB': 'bb',
     'marine science': 'ms', 'ms': 'ms', 'MARINE SCIENCE': 'ms',
     # --- Mathematics ---
+    "neuroscience":"ne","ne":"ne", "NE":"ne",
     'mathematics': 'ma', 'math': 'ma', 'ma': 'ma', 'MATHEMATICS': 'ma', 'MATH': 'ma', 'MA': 'ma',
 
     # --- Social Sciences ---
