@@ -58,8 +58,7 @@ DEPT_MAPPING = {
     'latin american studies': 'la', 'la': 'la', 'LATIN AMERICAN STUDIES': 'la', 'LA': 'la',
     'asian studies': 'ai', 'ai': 'ai', 'ASIAN STUDIES': 'ai', 'AI': 'ai',
     'american & new england studies': 'am', 'am': 'am', 'AMERICAN & NEW ENGLAND STUDIES': 'am', 'AM': 'am',
-    'near eastern languages & civilizations': 'ne', 'ne': 'ne', 'NEAR EASTERN LANGUAGES & CIVILIZATIONS': 'ne', 'NE': 'ne',
-    'jewish studies': 'jw', 'jw': 'jw', 'JEWISH STUDIES': 'jw', 'JW': 'jw',
+    'jewish studies': 'jS', 'jS': 'js', 'JEWISH STUDIES': 'jS', 'JS': 'js',
     'js': 'js', 'JS': 'js',  # alternate mapping
 
     # --- Music, Theatre, Arts ---
