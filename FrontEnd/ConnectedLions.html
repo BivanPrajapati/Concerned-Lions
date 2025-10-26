@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>BU Registration Help</title>
-    <link rel="stylesheet" type="text/css" href="./ConnectedLions.css">
-</head>
-
-<body>
-    <div id="page-wrapper" class="page">
+    <head>
+        <meta charset="UTF-8">
+        <title>BU Registration Help</title>
+        <link rel="stylesheet" type="text/css" href="./ConnectedLions.css">
+    </head>
+    <body>
+      <div id="page-wrapper" class="page">
         <header>
             <img id="dog-logo" src="terrier.jpg" alt="bu terrier imng" />
             <h1> BU Course Helper</h1>
@@ -20,22 +18,23 @@
                 <a href="./FAQ.html">FAQ and Resources</a>
                 <a href="./aboutus.html">About Us</a>
             </nav>
-            <main>
-
-                <div class="search">
-                    <br>
-                    <br>
-                    <br>
-                    <h1 class="big-text">NEED HELP CHOOSING CLASSES IN CAS?</h1>
-                    <br>
-                    <br>
-                    <input id="search-bar" placeholder="Enter Courses">
-                    <button onclick="Searchbar()" id="search">⌕</button>
-                    <!--Popup screen beneath search bar-->
-                    <div class="search-popup">
-                    </div>
+        <main>
+            <div id="main">
+            <h1 class="big-text">NEED HELP CHOOSING CLASSES IN CAS?</h1>
+            <div class="search-box">
+                <div class="row">
+                <input type="text" id = "input-box" placeholder="Enter Courses" autocomplete="off"> 
+                <button onclick = "Searchbar()" id = "search-button">⌕</button>
+                <!--Popup screen beneath search bar-->
                 </div>
-            </main>
+                <div class="result-box">
+                    <ul class="suggestions">
+                        
+                    </ul>
+                </div>
+            </div>
+            </div>
+        </main>
         </div>
         <footer>
 
@@ -43,6 +42,5 @@
     </div>
     <script src="ConnectedLions.js">
     </script>
-</body>
-
+    </body>
 </html>

@@ -1,3 +1,4 @@
+/* shared css for every page (start) */
 /* === ABOUT US PAGE VARIANT UPDATED === */
 * {
     margin: 0;
@@ -69,98 +70,60 @@ nav a {
     text-align: center;
 }
 
-/* Main content */
-main, #faq {
-    width: 70%;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;  /* center all text in main */
+/* shared css for every page (end) */
+
+/* The container class search - needed to position the dropup content */
+
+#main{
+    padding:5% 0;
+    color:#333;
 }
-
-/* Dropup content (Hidden by Default) */
-.search-popup {
-    display: none;
-    top: 50px;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+#main h1{
+    color:azure;
 }
-
-#search-bar:active .search-popup {
-    display: block;
-
+.search-box{
+    width:500px;
+    background:#FFF;
+    margin: 100px auto 0;
+    border-radius: 5px;
 }
-
-/* Links inside the dropup */
-.search-popup a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* default cursor for everything */
-body {
-    cursor: url('paw1.png'), auto;
-}
-
-/* red paw when hovering over clickable items */
-a,
-button,
-input[type="submit"],
-input[type="button"] {
-    cursor: url('redpaw1.png'), pointer;
-/* Search bar / magnifying glass centered */
-.search-container {
-    display: flex;
-    justify-content: center;  /* horizontal centering */
+.row{
+    display:flex;
     align-items: center;
-    gap: 10px;
-    margin: 20px auto;
-    flex-direction: column;  /* stack popup below search bar+button */
-}
+    padding:10px 20px;
 
-/* Search input */
-#search-bar {
-    width: 500px;
-    height: 53px;
-    font-size: 18px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 2px solid #ccc;
 }
-
-/* Magnifying glass button */
-#search {
-    width: 60px;
-    height: 60px;
-    font-size: 30px;
-    border-radius: 50%;           /* make circular */
-    border: none;
-    background-color: rgb(204, 0, 0);
-    color: white;
-    cursor: url('redpaw1.png'), pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+#input-box{
+    flex:1;
+    height:59px;
+    background:transparent;
+    border:0;
+    outline:0;
+    font-size:18px;
+    color:#333;
 }
-
-/* Hover effect */
-#search:hover {
-    background-color: rgb(170, 0, 0);
-    transform: scale(1.1);
+button{
+    background: transparent;
+    border:0;
+    outline:0;
 }
+button{
+    width:25px;
+    color:#555;
+    font-size:22px;
+    cursor:pointer;
 
-/* Popup below search bar */
-.search-popup {
-    margin-top: 10px;
-    display: none; 
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
 }
-
-/* Red paw cursor for clickable items */
-a, button, input[type="submit"], input[type="button"] {
-    cursor: url('redpaw1.png'), pointer;
+::placeholder{
+    color:#130f0f;
+}
+.result-box ul{
+    border-top: 1px solid #999;
+    padding:15px 10px;
+}
+.result-box ul li{
+    list-style:none;
+    border-radius:3px;
+    padding:15px 10px;
+    cursor:pointer;
 }
