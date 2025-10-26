@@ -379,4 +379,3 @@ def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../Fr
 
 
 # --- Example usage ---
-visualize_full_prereq_tree("CS330")

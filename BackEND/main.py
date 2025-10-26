@@ -1,49 +1,32 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-import io
-import Web_Scraping as ws
+from fastapi import FastAPI, Form, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+import os
 import Logic as lg
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="BU Course Info API", version="1.0")
 
-class CourseRequest(BaseModel):
-    course_name: str
+# --- Path to FrontEnd/src relative to main.py ---
+FRONTEND_SRC = os.path.join(os.path.dirname(__file__), "..", "FrontEnd", "src")
 
-@app.post("/course-tree")
-def course_tree(request: CourseRequest):
+# Serve static files (PNG)
+app.mount("/static", StaticFiles(directory=FRONTEND_SRC), name="static")
+
+@app.post("/generate-tree")
+def generate_tree(course_name: str = Form(...)):
     try:
-        course_name = request.course_name
-        # Get the image buffer to stream back to the client
-        img_buf = lg.visualize_full_prereq_tree(course_name, return_buffer=True)
-        return StreamingResponse(img_buf, media_type="image/png")
+        save_path = os.path.join(FRONTEND_SRC, "prereq_tree.png")
+        lg.visualize_full_prereq_tree(course_name, return_buffer=False, save_path=save_path)
+        return JSONResponse({"success": True})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating tree: {str(e)}")
 
-@app.get("/course-tree")
-def course_tree_get(course_name: str):
-    try:
-        # Get the image buffer to stream back to the client
-        img_buf = lg.visualize_full_prereq_tree(course_name, return_buffer=True)
-        return StreamingResponse(img_buf, media_type="image/png")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
-
-@app.post("/course-info")
-def course_info(request: CourseRequest):
-    return lg.classes_used(request.course_name)
-
-
-@app.get("/course-info")
-def course_info_get(course_name: str):
-    return lg.classes_used(course_name)
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with your frontend URL
+    allow_origins=["*"],  # Allows requests from any origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
