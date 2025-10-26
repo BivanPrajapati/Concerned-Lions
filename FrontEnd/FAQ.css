@@ -106,3 +106,12 @@ details p a {
 details p a:hover {
   color: #fff3d0;
 }
+
+body {
+  cursor: url('paw1.png'), auto;
+}
+
+/* red paw when hovering over clickable items */
+a, button, input[type="submit"], input[type="button"] {
+  cursor: url('redpaw1.png'), pointer;
+} 

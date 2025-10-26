@@ -91,4 +91,11 @@ main {
     font-size: 1.3em; /* makes everything inside main about 30% larger */
   }
 
+  body {
+    cursor: url('paw1.png'), auto;
+  }
   
+  /* red paw when hovering over clickable items */
+  a, button, input[type="submit"], input[type="button"] {
+    cursor: url('redpaw1.png'), pointer;
+  } 
