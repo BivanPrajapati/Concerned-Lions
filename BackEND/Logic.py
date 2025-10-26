@@ -223,7 +223,7 @@ def parse_prereq_logic(prereq_text):
         return None
 
     return parse(prereq_text)
-def visualize_full_prereq_tree(course_name, return_buffer=False, save_path="../FrontEnd/src/prereq_tree.png"):
+def visualize_full_prereq_tree(course_name, return_buffer = False, save_path="../FrontEnd/src/prereq_tree.png"):
     import matplotlib.pyplot as plt
     import networkx as nx
     import io

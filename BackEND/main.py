@@ -23,36 +23,17 @@ os.makedirs(frontend_src_dir, exist_ok=True)
 
 # --- Serve static files ---
 app.mount("/static", StaticFiles(directory=frontend_src_dir), name="static")
+from fastapi.responses import StreamingResponse
 
-# --- Generate prerequisite tree and return PNG directly ---
 @app.post("/generate-tree")
 async def generate_tree(course_name: str = Form(...)):
     try:
-        safe_name = course_name.replace(" ", "_").upper()
-        output_filename = f"{safe_name}_prereq_tree.png"
-        output_path = os.path.join(frontend_src_dir, output_filename)
+        # Generate PNG in memory
+        buf = lg.visualize_full_prereq_tree(course_name, return_buffer=True)
 
-        # Generate the PNG
-        lg.visualize_full_prereq_tree(course_name, save_path=output_path)
-
-        # Wait until file exists and is non-empty
-        timeout = 10
-        interval = 0.2
-        waited = 0
-        while not os.path.exists(output_path) or os.path.getsize(output_path) == 0:
-            time.sleep(interval)
-            waited += interval
-            if waited >= timeout:
-                return JSONResponse({"success": False, "error": "PNG generation timeout"}, status_code=500)
-
-        # Return PNG directly
-        return FileResponse(
-            output_path,
-            media_type="image/png",
-            filename=output_filename,
-            headers={"Cache-Control": "no-store"}  # prevent caching
-        )
+        # Return buffer as image/png
+        return StreamingResponse(buf, media_type="image/png")
 
     except Exception as e:
-        print("Error:", e)
+        print("❌ Error generating tree:", e)
         return JSONResponse({"success": False, "error": str(e)}, status_code=500)
