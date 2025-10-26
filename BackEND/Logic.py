@@ -5,36 +5,46 @@ import Web_Scraping as ws
 def display_course(course):
     return re.sub(r'^CAS', '', course, flags=re.IGNORECASE)
 
+
 def normalize_separators(prereq_string):
     prereq_string = re.sub(r'\s*[,;]\s*', ' and ', prereq_string, flags=re.IGNORECASE)
     prereq_string = re.sub(r'(and\s+)+and', 'and', prereq_string, flags=re.IGNORECASE)
     prereq_string = re.sub(r'\s+', ' ', prereq_string)
     return prereq_string.strip()
 
+
 def extract_prereqs(course_name):
     normalized_course = ws.normalize_course(course_name)
     if not normalized_course:
-        return ""
+        return None  # ❗ Return None if normalization fails
+
     description = ws.scrape_course_description(course_name)
     if not description:
-        return ""
+        return None  # ❗ Return None if no course page or description found
+
     match = re.search(r'Prerequisites\s*:?\s*(.*?)\s*(?:-|\.|\n|$)',
                       description, re.IGNORECASE | re.DOTALL)
     if not match:
-        return ""
+        return None  # ❗ Return None if no "Prerequisites" section found
+
     prereq_text = match.group(1)
     prereq_text = ws.clean_text(prereq_text)
     prereq_text = re.sub(r'\bCAS', '', prereq_text, flags=re.IGNORECASE)
     prereq_text = normalize_separators(prereq_text)
-    return prereq_text
+    return prereq_text or None  # ❗ Return None if text is empty
+
 
 def extract_course_codes(prereq_string):
+    if not prereq_string:
+        return []
+
     codes = re.findall(r'\b[A-Z]{2,4}\s*\d{3}[A-Z]?\b', prereq_string)
     slash_codes = re.findall(r'\b([A-Z]{2,4}\d{3})/([A-Z]{2,4}\d{3})\b', prereq_string)
     for c1, c2 in slash_codes:
         codes.append(c1)
         codes.append(c2)
-    return list(set(codes))  
+    return list(set(codes))
+
 
 def get_prereqs_for_courses(course_list, visited=None, level=0):
     if visited is None:
@@ -45,43 +55,45 @@ def get_prereqs_for_courses(course_list, visited=None, level=0):
     for course in course_list:
         normalized_course = ws.normalize_course(course)
         if not normalized_course:
-            results.append(f"{indent}{course} (cannot normalize)")
-            continue
+            return None  # ❗ Return None if invalid course name
+
         if normalized_course in visited:
             continue
         visited.add(normalized_course)
 
         course_disp = display_course(normalized_course)
         prereq_string = extract_prereqs(course)
-        if prereq_string:
-            results.append(f"{indent}{course_disp} prerequisites: {prereq_string}")
+        if prereq_string is None:
+            # ❗ If no description or course not available
+            results.append(f"{indent}{course_disp}: None (course not available)")
+            continue
 
-            prereq_codes = extract_course_codes(prereq_string)
-            if prereq_codes:
-                results.extend(get_prereqs_for_courses(prereq_codes, visited=visited, level=level+1))
-        else:
-            results.append(f"{indent}{course_disp} has no prerequisites")
+        results.append(f"{indent}{course_disp} prerequisites: {prereq_string}")
 
-    return results
+        prereq_codes = extract_course_codes(prereq_string)
+        if prereq_codes:
+            nested = get_prereqs_for_courses(prereq_codes, visited=visited, level=level + 1)
+            if nested:
+                results.extend(nested)
+
+    return results or None  # ❗ Return None if nothing valid was found
+
 
 def classes_used(course_list):
     if isinstance(course_list, str):
         course_list = [course_list]
-    return "\n".join(get_prereqs_for_courses(course_list))
+    result = get_prereqs_for_courses(course_list)
+    return "\n".join(result) if result else None
 
 
 def extract_hub(course_name):
-    """
-    Extracts the BU Hub area(s) from a course description.
-    Returns a clean string like 'Quantitative Reasoning II'.
-    """
     normalized_course = ws.normalize_course(course_name)
     if not normalized_course:
-        return ""
+        return None  # ❗ Return None if normalization fails
 
     description = ws.scrape_course_description(course_name)
     if not description:
-        return ""
+        return None  # ❗ Return None if no course found
 
     match = re.search(
         r"this course fulfills.*?BU Hub area[s]*:?\s*(.*?)\.",
@@ -89,17 +101,14 @@ def extract_hub(course_name):
         re.IGNORECASE | re.DOTALL
     )
     if not match:
-        return ""
+        return None
 
     hub_text = match.group(1)
     hub_text = ws.clean_text(hub_text)
-    return hub_text.strip()
+    return hub_text.strip() or None
+
 
 def get_hubs_for_courses(course_list, visited=None):
-    """
-    Accepts a course or list of courses.
-    Returns a string of BU Hub areas for each course recursively.
-    """
     if visited is None:
         visited = set()
 
@@ -108,8 +117,7 @@ def get_hubs_for_courses(course_list, visited=None):
     for course in course_list:
         normalized_course = ws.normalize_course(course)
         if not normalized_course:
-            results.append(f"{course} (cannot normalize)")
-            continue
+            return None  # ❗ Return None if invalid
 
         if normalized_course in visited:
             continue
@@ -117,14 +125,17 @@ def get_hubs_for_courses(course_list, visited=None):
 
         course_disp = re.sub(r'^CAS', '', normalized_course, flags=re.IGNORECASE)
         hub_text = extract_hub(course)
-        if hub_text:
-            results.append(f"{course_disp}: {hub_text}")
+        if hub_text is None:
+            results.append(f"{course_disp}: None (course not available)")
         else:
-            results.append(f"{course_disp}: No Hub requirement")
+            results.append(f"{course_disp}: {hub_text}")
 
-    return "\n".join(results)
+    return "\n".join(results) if results else None
+
 
 def hubs_used(course_list):
     if isinstance(course_list, str):
         course_list = [course_list]
-    return get_hubs_for_courses(course_list)
+    result = get_hubs_for_courses(course_list)
+    return result or None
+
