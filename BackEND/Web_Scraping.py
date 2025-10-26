@@ -238,6 +238,8 @@ DEPT_MAPPING = {
     'WR': 'wr',
 }
 
+def hubs_sued(course_name):
+    usedpass
 def clean_text(text):
     return re.sub(r'\s+', ' ', text).strip()
 
@@ -278,7 +280,6 @@ def scrape_course_description(course_name):
             if text and not text.startswith("Note") and exclude_text not in text:
                 description_parts.append(text)
 
-        # Include info boxes if any
         info_boxes = content.find_all(class_="content")
         for box in info_boxes:
             for p in box.find_all("p"):

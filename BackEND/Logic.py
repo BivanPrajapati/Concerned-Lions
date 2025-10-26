@@ -28,16 +28,13 @@ def extract_prereqs(course_name):
     prereq_text = normalize_separators(prereq_text)
     return prereq_text
 
-# --- Extract all course codes from a string, including slash/or ---
 def extract_course_codes(prereq_string):
-    # Match normal course codes
     codes = re.findall(r'\b[A-Z]{2,4}\s*\d{3}[A-Z]?\b', prereq_string)
-    # Match slash-separated pairs like CS132/MA242
     slash_codes = re.findall(r'\b([A-Z]{2,4}\d{3})/([A-Z]{2,4}\d{3})\b', prereq_string)
     for c1, c2 in slash_codes:
         codes.append(c1)
         codes.append(c2)
-    return list(set(codes))  # remove duplicates
+    return list(set(codes))  
 
 def get_prereqs_for_courses(course_list, visited=None, level=0):
     if visited is None:
@@ -59,7 +56,6 @@ def get_prereqs_for_courses(course_list, visited=None, level=0):
         if prereq_string:
             results.append(f"{indent}{course_disp} prerequisites: {prereq_string}")
 
-            # Recursively expand all courses in the prereq string
             prereq_codes = extract_course_codes(prereq_string)
             if prereq_codes:
                 results.extend(get_prereqs_for_courses(prereq_codes, visited=visited, level=level+1))
@@ -87,7 +83,6 @@ def extract_hub(course_name):
     if not description:
         return ""
 
-    # Search for the BU Hub phrase
     match = re.search(
         r"this course fulfills.*?BU Hub area[s]*:?\s*(.*?)\.",
         description,
@@ -100,7 +95,6 @@ def extract_hub(course_name):
     hub_text = ws.clean_text(hub_text)
     return hub_text.strip()
 
-# --- Recursive version for multiple courses ---
 def get_hubs_for_courses(course_list, visited=None):
     """
     Accepts a course or list of courses.
@@ -130,11 +124,7 @@ def get_hubs_for_courses(course_list, visited=None):
 
     return "\n".join(results)
 
-# --- Public function ---
 def hubs_used(course_list):
     if isinstance(course_list, str):
         course_list = [course_list]
     return get_hubs_for_courses(course_list)
-
-
-print(hubs_used("cs210"))
