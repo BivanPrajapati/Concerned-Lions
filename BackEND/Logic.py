@@ -223,33 +223,31 @@ def parse_prereq_logic(prereq_text):
         return None
 
     return parse(prereq_text)
-def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../FrontEnd/src/prereq_tree.png"):
+def visualize_full_prereq_tree(course_name, return_buffer=False, save_path="../FrontEnd/src/prereq_tree.png"):
     import matplotlib.pyplot as plt
     import networkx as nx
+    import io
+    import os
+
+    # Ensure save directory exists
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
     root = ws.normalize_course(course_name.strip()) or course_name.strip()
     prereq_string = extract_prereqs(root)
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.set_axis_off()
-
-    # --- Handle special cases ---
-    if prereq_string == "COURSE_NOT_FOUND":
-        ax.text(0.5, 0.5, f"{display_course(root)} is not available",
-                ha='center', va='center', fontsize=14, color='red', weight='bold')
+    # --- Handle special cases first ---
+    if prereq_string == "COURSE_NOT_FOUND" or not prereq_string:
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.set_axis_off()
+        if prereq_string == "COURSE_NOT_FOUND":
+            ax.text(0.5, 0.5, f"{display_course(root)} is not available",
+                    ha='center', va='center', fontsize=14, color='red', weight='bold')
+        else:
+            ax.text(0.5, 0.5, f"{display_course(root)} has no prerequisites",
+                    ha='center', va='center', fontsize=14, color='blue', weight='bold')
         fig.tight_layout()
         fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
         plt.close(fig)
-        print(f"❌ {display_course(root)} is not available. Saved plot to {save_path}")
-        return save_path
-
-    if not prereq_string:
-        ax.text(0.5, 0.5, f"{display_course(root)} has no prerequisites",
-                ha='center', va='center', fontsize=14, color='blue', weight='bold')
-        fig.tight_layout()
-        fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
-        plt.close(fig)
-        print(f"ℹ️ {display_course(root)} has no prerequisites. Saved plot to {save_path}")
         return save_path
 
     # --- Normal case ---
@@ -300,11 +298,13 @@ def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../Fr
     # --- Compute hierarchical positions ---
     def hierarchy_pos(G, root, vert_gap=3.0, x_min=0, x_max=1.0):
         pos = {}
+
         def subtree_width(node):
             children = list(G.successors(node))
             if not children:
                 return 1
             return sum(subtree_width(c) for c in children)
+
         def _assign(node, x_left, x_right, depth=0):
             children = list(G.successors(node))
             pos[node] = ((x_left + x_right) / 2, -depth * vert_gap)
@@ -318,6 +318,7 @@ def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../Fr
                 child_x_right = current_x + (x_right - x_left) * (w / total)
                 _assign(c, child_x_left, child_x_right, depth + 1)
                 current_x += (x_right - x_left) * (w / total)
+
         _assign(root, x_min, x_max)
         return pos
 
@@ -329,8 +330,7 @@ def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../Fr
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
 
     node_labels = nx.get_node_attributes(G, 'label')
-    node_colors = []
-    node_sizes = []
+    node_colors, node_sizes = [], []
     for n in G.nodes():
         label = G.nodes[n]['label']
         if n == root:
@@ -355,27 +355,20 @@ def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../Fr
     ax.set_title(f"Full Prerequisite Tree with AND/OR for {display_course(root)}",
                  fontsize=16, pad=20)
     fig.tight_layout()
-    # --- ✅ THIS IS THE MAIN FIX ---
-    
-    # 1. Save to buffer *first* (if requested)
+
+    # --- Save image ---
     if return_buffer:
         img_buf = io.BytesIO()
         fig.savefig(img_buf, format='png', bbox_inches='tight', dpi=200)
         img_buf.seek(0)
-
-    # 2. Save to file (optional, as your old code did)
-    # You can comment this out if you don't need a local file
-    fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
-
-    # 3. *Now* you can safely close the figure
-    plt.close(fig)
-
-    # 4. Return the buffer
-    if return_buffer:
+        plt.close(fig)
         return img_buf
-    
-    return save_path # Fallback
 
+    fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
+    plt.close(fig)
+    return save_path
 
 
 # --- Example usage ---
+
+
