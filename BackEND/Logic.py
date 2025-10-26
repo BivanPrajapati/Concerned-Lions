@@ -185,177 +185,165 @@ def hubs_used(course_list):
     if isinstance(course_list, str):
         course_list = [course_list]
     return get_hubs_for_courses(course_list)
-
 def parse_prereq_logic(prereq_text):
     """
-    Parse a prerequisite string into a nested structure of course codes with AND/OR relationships.
-    Returns a nested dict/tuple representation.
+    Parse prerequisites into nested AND/OR structure.
+    Only keeps valid course codes like CS112.
     """
     prereq_text = clean_prereq_text(prereq_text)
-    
+    # Remove unwanted phrases
+    prereq_text = re.sub(r'\bor equivalent\b', '', prereq_text, flags=re.IGNORECASE)
+    prereq_text = re.sub(r'\bor consent of instructor\b', '', prereq_text, flags=re.IGNORECASE)
+
     def parse(text):
         text = text.strip()
-        # Handle parentheses recursively
-        while '(' in text:
-            text = re.sub(r'\(([^()]+)\)', lambda m: str(parse(m.group(1))), text)
-        
-        # Split AND/OR
+        if not text:
+            return None
+
+        # Split AND first
         if ' and ' in text:
-            parts = [p.strip() for p in re.split(r'\band\b', text)]
-            return ('AND', [parse(p) for p in parts])
-        elif ' or ' in text:
-            parts = [p.strip() for p in re.split(r'\bor\b', text)]
-            return ('OR', [parse(p) for p in parts])
-        else:
-            # Return normalized course code
-            code_match = re.findall(r'\b[A-Z]{2,4}\s*\d{3}[A-Z]?\b', text)
-            if code_match:
-                return code_match if len(code_match) > 1 else code_match[0]
-            return text
+            parts = [parse(p) for p in re.split(r'\band\b', text)]
+            parts = [p for p in parts if p]
+            if not parts:
+                return None
+            return ('AND', parts)
+
+        # Split OR next
+        if ' or ' in text:
+            parts = [parse(p) for p in re.split(r'\bor\b', text)]
+            parts = [p for p in parts if p]
+            if not parts:
+                return None
+            return ('OR', parts)
+
+        # Only return valid course codes
+        codes = re.findall(r'\b[A-Z]{2,4}\s*\d{3}[A-Z]?\b', text)
+        if codes:
+            return codes if len(codes) > 1 else codes[0]
+        return None
 
     return parse(prereq_text)
-
-
-def extract_course_logic(course_name):
-    """
-    Return only the course codes and logical connections for a given course.
-    """
-    prereq_string = extract_prereqs(course_name)
-    if not prereq_string:
-        return None
-    if prereq_string == "COURSE_NOT_FOUND":
-        return f"{course_name} not found"
-    
-    return parse_prereq_logic(prereq_string)
- 
-
 def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
-    import io
-    import re
     import matplotlib.pyplot as plt
     import networkx as nx
 
-    root = ws.normalize_course(course_name) or course_name
-    prereq_string = extract_prereqs(root)
-
-    # --- Handle missing or empty prerequisites ---
-    if prereq_string == "COURSE_NOT_FOUND":
-        fig, ax = plt.subplots(figsize=(4, 2))
-        ax.text(0.5, 0.5, f"{display_course(root)}\nnot available",
-                fontsize=14, ha='center', va='center', weight='bold')
-        ax.set_axis_off()
-        fig.savefig(save_path, bbox_inches='tight', dpi=150)
-        plt.close(fig)
-        return save_path
-
-    if not prereq_string:
-        fig, ax = plt.subplots(figsize=(4, 2))
-        ax.text(0.5, 0.5, f"{display_course(root)}\nhas no prerequisites",
-                fontsize=14, ha='center', va='center', weight='bold')
-        ax.set_axis_off()
-        fig.savefig(save_path, bbox_inches='tight', dpi=150)
-        plt.close(fig)
-        return save_path
-
-    # --- Parse prerequisite string into structure ---
-    def parse_prereq_text(text):
-        text = text.strip()
-        # Handle parentheses recursively
-        while '(' in text:
-            text = re.sub(r'\(([^()]+)\)', lambda m: parse_prereq_text(m.group(1)), text)
-        # Detect AND/OR
-        if ' and ' in text:
-            parts = [p.strip() for p in re.split(r'\band\b', text)]
-            return ('AND', [parse_prereq_text(p) for p in parts])
-        elif ' or ' in text:
-            parts = [p.strip() for p in re.split(r'\bor\b', text)]
-            return ('OR', [parse_prereq_text(p) for p in parts])
-        else:
-            return ws.normalize_course(text) or text
-
-    parsed = parse_prereq_text(prereq_string)
-
-    # --- Build directed graph ---
+    root = ws.normalize_course(course_name.strip()) or course_name.strip()
     G = nx.DiGraph()
-    visited = set()
+    visited_courses = set()
 
-    def add_structure(structure, parent):
-        """Recursively add nodes with AND/OR logic."""
+    # --- Build the graph recursively ---
+    def add_structure(structure, parent=None):
+        if structure is None:
+            return
+        if isinstance(structure, list):
+            structure = ('OR', structure)
         if isinstance(structure, tuple):
             logic, items = structure
             logic_node = f"{logic}_{len(G.nodes())}"
             G.add_node(logic_node, label=logic)
-            G.add_edge(logic_node, parent)
+            if parent:
+                G.add_edge(logic_node, parent)
             for item in items:
                 add_structure(item, logic_node)
-        else:
-            course = structure
-            if course not in visited:
-                visited.add(course)
-                G.add_node(course, label=display_course(course))
+            return
+        course = structure
+        if course in visited_courses:
+            if parent:
+                G.add_edge(course, parent)
+            return
+        visited_courses.add(course)
+        G.add_node(course, label=display_course(course))
+        if parent:
             G.add_edge(course, parent)
+        prereq_string = extract_prereqs(course)
+        if not prereq_string or prereq_string == "COURSE_NOT_FOUND":
+            return
+        logic_structure = parse_prereq_logic(prereq_string)
+        if logic_structure:
+            add_structure(logic_structure, course)
 
-    G.add_node(root, label=display_course(root))
-    add_structure(parsed, root)
+    add_structure(root)
 
-    # --- Compute custom layered layout (no Graphviz) ---
-    # Reverse edges for top-down orientation
-    revG = G.reverse(copy=False)
-    depths = dict(nx.single_source_shortest_path_length(revG, root))
-    levels = {}
-    for n, d in depths.items():
-        levels.setdefault(d, []).append(n)
+    # --- Classic tree layout with non-overlapping nodes ---
+    def compute_positions(G, root):
+        """
+        Assign positions to nodes such that:
+        - Root is at top center.
+        - Children are spaced evenly according to subtree size.
+        """
+        pos = {}
+        def _assign(node, x_min, x_max, depth=0):
+            children = list(G.predecessors(node))
+            pos[node] = ((x_min + x_max) / 2, -depth * 3)  # depth * vertical_gap
+            if not children:
+                return 1  # subtree width = 1
+            # Compute widths of subtrees
+            subtree_widths = []
+            for child in children:
+                width = _assign(child, 0, 0, depth + 1)  # placeholder
+                subtree_widths.append(width)
+            total_width = sum(subtree_widths)
+            # Assign real x positions
+            current_x = x_min
+            for child, width in zip(children, subtree_widths):
+                new_x_min = current_x
+                new_x_max = current_x + width
+                pos[child] = ((new_x_min + new_x_max)/2, - (depth + 1)*3)
+                current_x += width
+            return total_width
 
-    vertical_gap = 3.0
-    horizontal_gap = 3.5
-    pos = {}
-    max_depth = max(levels.keys())
+        # Estimate full width
+        def get_subtree_width(node):
+            children = list(G.predecessors(node))
+            if not children:
+                return 1
+            return sum(get_subtree_width(c) for c in children)
 
-    for depth, nodes in sorted(levels.items()):
-        nodes.sort()
-        width = (len(nodes) - 1) * horizontal_gap
-        x_start = -width / 2
-        y = depth * vertical_gap
-        for i, n in enumerate(nodes):
-            pos[n] = (x_start + i * horizontal_gap, y)
+        total_width = get_subtree_width(root)
+        _assign(root, 0, total_width)
+        return pos
 
-    # --- Draw ---
-    fig_h = (max_depth + 2) * vertical_gap
-    fig_w = max(10, len(G.nodes()) * 1.2)
+    pos = compute_positions(G, root)
+
+    # --- Draw the graph ---
+    fig_w = max(12, len(G.nodes()) * 1.8)
+    fig_h = max(8, len(G.nodes()) * 1.5)
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
 
     node_labels = nx.get_node_attributes(G, 'label')
     node_colors = []
+    node_sizes = []
     for n in G.nodes():
+        label = G.nodes[n]['label']
         if n == root:
-            node_colors.append('#7FB3D5')  # root
-        elif 'AND' in n:
-            node_colors.append('#F7DC6F')  # AND node
-        elif 'OR' in n:
-            node_colors.append('#F1948A')  # OR node
+            node_colors.append('#7FB3D5')
+            node_sizes.append(2400)
+        elif label == "AND":
+            node_colors.append('#F7DC6F')
+            node_sizes.append(1800)
+        elif label == "OR":
+            node_colors.append('#F1948A')
+            node_sizes.append(1800)
         else:
-            node_colors.append('#A9DFBF')  # normal course
+            node_colors.append('#A9DFBF')
+            node_sizes.append(2000)
 
-    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=2200,
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=node_sizes,
                            edgecolors='black', linewidths=1.3, ax=ax)
-    nx.draw_networkx_labels(G, pos, labels=node_labels,
-                            font_size=10, font_weight='bold', ax=ax)
-    nx.draw_networkx_edges(G, pos, arrows=True, arrowsize=18,
-                           width=1.4, edge_color='#444', ax=ax)
+    nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=10, font_weight='bold', ax=ax)
+    nx.draw_networkx_edges(G, pos, arrows=True, arrowsize=18, width=1.4, edge_color='#444', ax=ax)
 
-    # Flip Y so root is at top
-    ax.set_ylim((max_depth + 1) * vertical_gap, -vertical_gap)
     ax.set_axis_off()
-    ax.set_title(f"Full Prerequisite Tree for {display_course(root)}",
+    ax.set_title(f"Full Prerequisite Tree with AND/OR for {display_course(root)}",
                  fontsize=16, pad=20)
     fig.tight_layout()
-
     fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
     plt.close(fig)
-    print(f"✅ Prerequisite tree saved to {save_path}")
+    print(f"✅ Full prerequisite tree saved to {save_path}")
     return save_path
 
 
-print(extract_course_logic("cs330"))
-path = visualize_full_prereq_tree("cs330")
+
+# --- Example usage ---
+path = visualize_full_prereq_tree("CS365")
 print("Saved tree at:", path)
