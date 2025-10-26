@@ -1,56 +1,63 @@
 /* === ABOUT US PAGE STYLING === */
-/* shared css for every page (start) */
 * {
     margin: 0;
     box-sizing: border-box;
 }
-#page-wrapper{
-    margin:auto;
-    background-color:rgb(45,41,38);
-    height: 100%; /* change if the content exceeds brower's viewport */
-    color:white;
-    font-size:calc(3px+ 1vw);
-    font-family:sans-serif,Serif,Arial;
-    text-align:center;
 
+body {
+    cursor: url('paw1.png'), auto;
+    font-family: sans-serif, Serif, Arial;
+    color: white;
+    text-align: center;
+    font-size: calc(3px + 1vw);
+    background-color: rgb(45,41,38); /* black background */
+    margin: 0;
 }
+
+#page-wrapper {
+    margin: auto;
+    background-color: rgb(45,41,38);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    padding-left: 20px;
+    height: 15%;
     position: relative;
     top: 20px;
-    height: 10%;
-
-    display: flex;
-    /* put image + title on same line */
-    align-items: center;
-    /* vertically align them */
-    justify-content: flex-start;
-    /* keep them aligned to the left */
-    gap: 15px;
-    /* space between the dog and title */
-    padding-left: 20px;
-    /* little space from the left edge */
 }
 
-.big_text{
-    font-family: 'Montserrat', helvetica, sans-serif, serif, arial;
+header h1 {
+    position: relative;
+    top: 0;
+    font-family: 'Montserrat', sans-serif;
     font-size: 50px;
-    /* bigger title */
     font-weight: bold;
+    margin: 0;
 }
-.small_text{
-    font-family: 'Cambria',helvetica,sans-serif,serif,arial;
+
+#dog-logo {
+    height: 60px;
+    width: auto;
 }
 
 #container {
     display: flex;
     flex-direction: column;
     width: 100%;
+    flex: 1;
 }
 
 nav {
     margin: 6% 0;
     padding: 1% 0;
-    background-color: rgb(204, 0, 0);
+    background-color: rgb(204,0,0);
 }
 
 nav a {
@@ -59,23 +66,11 @@ nav a {
     color: white;
     text-decoration: none;
     font-size: 20px;
-    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
-    text-align: center; /* If you want the text to be centered */
+    width: 25%;
+    text-align: center;
 }
 
-/* === Fonts === */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-
-/* Headings */
-h1 {
-    font-family: 'Montserrat', sans-serif;
-    color: white;
-    margin-top: 40px;
-    margin-bottom: 30px;
-}
-
-/* About Us section */
-#faq {
+main, #faq {
     width: 70%;
     margin: 0 auto;
     padding: 20px;
@@ -83,43 +78,23 @@ h1 {
     line-height: 1.5;
 }
 
-/* Description paragraph */
 #faq p {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: #96c4e5;
     margin-bottom: 15px;
 }
 
-#faq p strong {
-    color: #96c4e5;
-}
-
-/* Emails (pale yellow) */
 #faq p a {
     color: #fff6b7;
     text-decoration: none;
 }
 
 #faq p a:hover {
-    text-decoration: underline;
     color: #fff3d0;
+    text-decoration: underline;
 }
 
-main {
-    font-size: 1.3em; /* makes everything inside main about 30% larger */
-  }
-
-  body {
-    cursor: url('paw1.png'), auto;
-  }
-  
-  /* red paw when hovering over clickable items */
-  a, button, input[type="submit"], input[type="button"] {
+/* red paw when hovering over clickable items */
+a, button, input[type="submit"], input[type="button"] {
     cursor: url('redpaw1.png'), pointer;
-  } 
-
-  #dog-logo {
-    height: 60px;         /* fixed height — tweak this number as needed */
-    width: auto;          /* keep the aspect ratio */
-  }
-  
+}

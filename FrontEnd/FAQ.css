@@ -1,74 +1,73 @@
-/* === FAQ Page Styling === */
-/* shared css for every page (start) */
-*{
-    margin: 0;
-    box-sizing: border-box;
+/* === FAQ PAGE === */
+* {
+  margin: 0;
+  box-sizing: border-box;
 }
-#page-wrapper{
-    margin:auto;
-    background-color:rgb(45,41,38);
-    height: 100%; /* change if the content exceeds brower's viewport */
-    color:white;
-    font-size:calc(3px+ 1vw);
-    font-family:sans-serif,Serif,Arial;
-    text-align:center;
 
+body {
+  cursor: url('paw1.png'), auto;
+  font-family: sans-serif, Serif, Arial;
+  color: white;
+  text-align: center;
+  font-size: calc(3px + 1vw);
+  background-color: rgb(45,41,38); /* black background */
+  margin: 0;
 }
+
+#page-wrapper {
+  margin: auto;
+  background-color: rgb(45,41,38);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  padding-left: 20px;
+  height: 15%;
   position: relative;
   top: 20px;
-  height: 10%;
+}
 
-  display: flex;
-  /* put image + title on same line */
-  align-items: center;
-  /* vertically align them */
-  justify-content: flex-start;
-  /* keep them aligned to the left */
-  gap: 15px;
-  /* space between the dog and title */
-  padding-left: 20px;
-  /* little space from the left edge */
-}
-.big_text{
-  font-family: 'Montserrat', helvetica, sans-serif, serif, arial;
+header h1 {
+  position: relative;
+  top: 0;
+  font-family: 'Montserrat', sans-serif;
   font-size: 50px;
-  /* bigger title */
   font-weight: bold;
+  margin: 0;
 }
-.small_text{
-    font-family: 'Cambria',helvetica,sans-serif,serif,arial;
+
+#dog-logo {
+  height: 60px;
+  width: auto;
 }
-#container{
-    display:flex;
-    flex-direction: column;
-    width:100%;
+
+#container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
 }
-nav{
+
+nav {
   margin: 6% 0;
   padding: 1% 0;
-    background-color: rgb(204,0,0);
-
+  background-color: rgb(204,0,0);
 }
+
 nav a {
-    float: left;
-    padding: 25px;
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
-    text-align: center; /* If you want the text to be centered */
-}
-/* shared css for every page (end) */
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-
-/* Headings */
-h1 {
-  font-family: 'Montserrat', sans-serif;
+  float: left;
+  padding: 25px;
   color: white;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  text-decoration: none;
+  font-size: 20px;
+  width: 25%;
+  text-align: center;
 }
 
 /* FAQ container */
@@ -93,28 +92,24 @@ details:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Questions (summary tags) */
 summary {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  color: #96c4e5; /* cobalt blue */
+  color: #96c4e5;
   font-size: 1.2em;
   cursor: pointer;
 }
 
-/* Remove default triangle marker style */
 summary::-webkit-details-marker {
   display: none;
 }
 
-/* Answers */
 details p {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  color: #fff6b7; /* pale yellow */
+  color: #fff6b7;
   margin-top: 10px;
   line-height: 1.5em;
 }
 
-/* Links inside answers */
 details p a {
   color: #ffd700;
   text-decoration: underline;
@@ -124,53 +119,36 @@ details p a:hover {
   color: #fff3d0;
 }
 
-body {
-  cursor: url('paw1.png'), auto;
-}
-
-/* red paw when hovering over clickable items */
-a, button, input[type="submit"], input[type="button"] {
-  cursor: url('redpaw1.png'), pointer;
-} 
-
- /* Website link styling (replaces search bar) */
-#website-link {
-  display: inline-block;           /* allows padding/margin like a button */
-  padding: 12px 25px;              /* space inside */
-  font-size: 18px;                 /* text size */
-  font-weight: bold;               
-  color: white;                    /* text color */
-  background-color: rgb(204, 0, 0); /* match your red theme */
-  border-radius: 10px;             /* rounded corners */
-  text-decoration: none;           /* remove underline */
-  cursor: url('redpaw1.png'), pointer; /* red paw cursor */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* hover effect for the link */
-#website-link:hover {
-  background-color: rgb(170, 0, 0); /* darker red on hover */
-  transform: scale(1.05);           /* slight grow effect */
-}
-
-  
-  /* optional hover effect */
-  #search:hover {
-    background-color: rgb(170, 0, 0); /* darker red on hover */
-    transform: scale(1.1);            /* slight grow effect */
-  }
-  
-  #dog-logo {
-    height: 60px;         /* fixed height — tweak this number as needed */
-    width: auto;          /* keep the aspect ratio */
-  }
-  
-  /* Style Terrier GPT link */
+/* Terrier GPT link */
 .search p a {
-  color: #ffd700;          /* match your other FAQ links */
+  color: #ffd700;
   text-decoration: underline;
 }
 
 .search p a:hover {
   color: #fff3d0;
+}
+
+/* Website button styling */
+#website-link {
+  display: inline-block;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(204,0,0);
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: url('redpaw1.png'), pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#website-link:hover {
+  background-color: rgb(170,0,0);
+  transform: scale(1.05);
+}
+
+/* red paw hover */
+a, button, input[type="submit"], input[type="button"] {
+  cursor: url('redpaw1.png'), pointer;
 }
