@@ -55,9 +55,11 @@ header h1 {
 }
 
 nav {
-  margin: 6% 0;
-  padding: 1% 0;
-  background-color: rgb(204,0,0);
+    display: flex;
+    justify-content: space-around;
+    margin: 6% 0;
+    padding: 1% 0;
+    background-color: rgb(204,0,0);
 }
 
 nav a {
