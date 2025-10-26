@@ -1,6 +1,6 @@
 # Concerned Lions
 
-The goal of concerned lions is to help students decide what classes they need to take next. The current course planer by BU we felt could be more acessible by being mmore visual and so we really wanted to incorpoate this into our class search.
+The goal of concerned lions is to help students decide what classes they need to take next by showing the its prerequisites. The current course planner by BU we felt could be more acessible by being more visual and so we really wanted to incorporate this into our class search.
 
 One particular aspect we focused on was the prerequisite for courses where we wanted to create a visual representation for courses.
 
