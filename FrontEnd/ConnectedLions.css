@@ -17,9 +17,16 @@ header{
     height:10%;
     text-align: center;
 }
-header h1{
+header{
+  
     position:relative;
     top:20px;
+}
+.big_text{
+    font-family: 'Montserrat',helvetica,sans-serif,serif,arial;
+}
+.small_text{
+    font-family: 'Montserrat',helvetica,sans-serif,serif,arial;
 }
 #container{
     display:flex;
@@ -57,7 +64,10 @@ nav a {
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
+#search-bar:active .search-popup{
+    display:block;
 
+}
 /* Links inside the dropup */
 .search-popup a {
   color: black;

@@ -1,0 +1,42 @@
+/* shared css for every page (start) */
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+#page-wrapper{
+    margin:auto;
+    background-color:rgb(45,41,38);
+    height: 100vh; /* change if the content exceeds brower's viewport */
+    color:white;
+    font-size:calc(3px+ 1vw);
+    font-family:sans-serif,Serif,Arial;
+    text-align:center;
+
+}
+header{
+    height:10%;
+    text-align: center;
+}
+header h1{
+    position:relative;
+    top:20px;
+}
+#container{
+    display:flex;
+    flex-direction: column;
+    width:100%;
+}
+nav{
+    background-color: rgb(204,0,0);
+
+}
+nav a {
+    float: left;
+    padding: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    text-align: center; /* If you want the text to be centered */
+}
+/* shared css for every page (end) */
