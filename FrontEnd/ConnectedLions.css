@@ -1,58 +1,62 @@
-/* shared css for every page (start) */
+/* === ABOUT US PAGE VARIANT UPDATED === */
 * {
     margin: 0;
     box-sizing: border-box;
 }
 
+body {
+    cursor: url('paw1.png'), auto;
+    font-family: sans-serif, Serif, Arial;
+    color: white;
+    text-align: center;
+    font-size: calc(3px + 1vw);
+    background-color: rgb(45,41,38);
+}
+
 #page-wrapper {
     margin: auto;
-    background-color: rgb(45, 41, 38);
-    height: 100vh;
-    /* change if the content exceeds brower's viewport */
-    color: white;
-    font-size: calc(3px+ 1vw);
-    font-family: sans-serif, Serif, Arial;
-    text-align: center;
-
-}
-header {
-    position: relative;
-    top: 5px;
-    height: 20%;
-
+    background-color: rgb(45,41,38);
+    min-height: 100vh;        /* make page scrollable if content exceeds viewport */
     display: flex;
-    /* put image + title on same line */
+    flex-direction: column;
+}
+
+header {
+    display: flex;
     align-items: center;
-    /* vertically align them */
     justify-content: flex-start;
-    /* keep them aligned to the left */
     gap: 15px;
-    /* space between the dog and title */
     padding-left: 20px;
-    /* little space from the left edge */
+    height: 15%;
+    position: relative;
+    top: 20px;
 }
 
-.big_text {
-    font-family: 'Montserrat', helvetica, sans-serif, serif, arial;
+header h1 {
+    position: relative;
+    top: 0;
+    font-family: 'Montserrat', sans-serif;
     font-size: 50px;
-    /* bigger title */
     font-weight: bold;
+    margin: 0;
 }
 
-.small_text {
-    font-family: 'Cambria', helvetica, sans-serif, serif, arial;
+#dog-logo {
+    height: 60px;
+    width: auto;
 }
 
 #container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 85%;
+    flex: 1;
 }
 
 nav {
-    background-color: rgb(204, 0, 0);
-    height: 20%;
+    margin: 6% 0;
+    padding: 1% 0;
+    background-color: rgb(204,0,0);
 }
 
 nav a {
@@ -62,23 +66,20 @@ nav a {
     text-decoration: none;
     font-size: 20px;
     width: 25%;
-    /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
     text-align: center;
-    /* If you want the text to be centered */
 }
 
-/* shared css for every page (end) */
-
-/* The container class search - needed to position the dropup content */
-.search {
-    position: relative;
-    display: inline-block;
+/* Main content */
+main, #faq {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;  /* center all text in main */
 }
 
 /* Dropup content (Hidden by Default) */
 .search-popup {
     display: none;
-    position: absolute;
     top: 50px;
     background-color: #f1f1f1;
     min-width: 160px;
@@ -110,56 +111,56 @@ button,
 input[type="submit"],
 input[type="button"] {
     cursor: url('redpaw1.png'), pointer;
+/* Search bar / magnifying glass centered */
+.search-container {
+    display: flex;
+    justify-content: center;  /* horizontal centering */
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    flex-direction: column;  /* stack popup below search bar+button */
 }
 
-/* Make the search bar bigger */
+/* Search input */
 #search-bar {
     width: 500px;
-    /* make it longer */
     height: 53px;
-    /* make it taller */
     font-size: 18px;
-    /* bigger text */
     padding: 8px 12px;
-    /* space inside */
     border-radius: 10px;
-    /* smooth corners */
     border: 2px solid #ccc;
 }
 
-/* Make the magnifying glass button bigger */
+/* Magnifying glass button */
 #search {
     width: 60px;
-    /* make the button wider */
     height: 60px;
-    /* make it taller */
     font-size: 30px;
-    /* make the ⌕ icon bigger */
-    border-radius: 50%;
-    /* make it a circle */
+    border-radius: 50%;           /* make circular */
     border: none;
     background-color: rgb(204, 0, 0);
-    /* match your red theme */
     color: white;
     cursor: url('redpaw1.png'), pointer;
-    /* red paw cursor */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* optional hover effect */
+/* Hover effect */
 #search:hover {
     background-color: rgb(170, 0, 0);
-    /* darker red on hover */
     transform: scale(1.1);
-    /* slight grow effect */
 }
 
-#dog-logo {
-    height: 60px;         /* fixed height — tweak this number as needed */
-    width: auto;          /* keep the aspect ratio */
-  }
-  
-  main {
-    height: 80%;
+/* Popup below search bar */
+.search-popup {
+    margin-top: 10px;
+    display: none; 
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
 
-  }
+/* Red paw cursor for clickable items */
+a, button, input[type="submit"], input[type="button"] {
+    cursor: url('redpaw1.png'), pointer;
+}
