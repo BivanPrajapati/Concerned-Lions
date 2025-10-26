@@ -237,9 +237,6 @@ DEPT_MAPPING = {
     'WRITING': 'wr',
     'WR': 'wr',
 }
-
-def hubs_sued(course_name):
-    usedpass
 def clean_text(text):
     return re.sub(r'\s+', ' ', text).strip()
 
