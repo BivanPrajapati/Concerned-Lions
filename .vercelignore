@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+.DS_Store
+.vscode
+.git
+*.log
+.ds_xvenv
+venv
+env
+node_modules
