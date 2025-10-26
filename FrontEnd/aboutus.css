@@ -1,42 +1,95 @@
+/* === ABOUT US PAGE STYLING === */
 /* shared css for every page (start) */
-*{
+* {
     margin: 0;
     box-sizing: border-box;
 }
-#page-wrapper{
-    margin:auto;
-    background-color:rgb(45,41,38);
-    height: 100vh; /* change if the content exceeds brower's viewport */
-    color:white;
-    font-size:calc(3px+ 1vw);
-    font-family:sans-serif,Serif,Arial;
-    text-align:center;
 
-}
-header{
-    height:10%;
+#page-wrapper {
+    margin: auto;
+    background-color: rgb(45, 41, 38);
+    min-height: 100vh;
+    color: white;
+    font-size: calc(3px + 1vw);
+    font-family: sans-serif, Serif, Arial;
     text-align: center;
 }
-header h1{
-    position:relative;
-    top:20px;
-}
-#container{
-    display:flex;
-    flex-direction: column;
-    width:100%;
-}
-nav{
-    background-color: rgb(204,0,0);
 
+header {
+    height: 10%;
+    text-align: center;
 }
+
+header h1 {
+    position: relative;
+    top: 20px;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+nav {
+    background-color: rgb(204, 0, 0);
+}
+
 nav a {
     float: left;
     padding: 25px;
     color: white;
     text-decoration: none;
     font-size: 20px;
-    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
-    text-align: center; /* If you want the text to be centered */
+    width: 25%;
+    text-align: center;
 }
-/* shared css for every page (end) */
+
+
+/* === Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+/* Headings */
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+/* About Us section */
+#faq {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+/* Description paragraph */
+#faq p {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #96c4e5;
+    margin-bottom: 15px;
+}
+
+#faq p strong {
+    color: #96c4e5;
+}
+
+/* Emails (pale yellow) */
+#faq p a {
+    color: #fff6b7;
+    text-decoration: none;
+}
+
+#faq p a:hover {
+    text-decoration: underline;
+    color: #fff3d0;
+}
+
+main {
+    font-size: 1.3em; /* makes everything inside main about 30% larger */
+  }
+
+  
