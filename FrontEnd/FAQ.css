@@ -133,28 +133,26 @@ a, button, input[type="submit"], input[type="button"] {
   cursor: url('redpaw1.png'), pointer;
 } 
 
-  /* Make the search bar bigger */
-  #search-bar {
-    width: 500px;        /* make it longer */
-    height: 53px;        /* make it taller */
-    font-size: 18px;     /* bigger text */
-    padding: 8px 12px;   /* space inside */
-    border-radius: 10px; /* smooth corners */
-    border: 2px solid #ccc;
-  }
+ /* Website link styling (replaces search bar) */
+#website-link {
+  display: inline-block;           /* allows padding/margin like a button */
+  padding: 12px 25px;              /* space inside */
+  font-size: 18px;                 /* text size */
+  font-weight: bold;               
+  color: white;                    /* text color */
+  background-color: rgb(204, 0, 0); /* match your red theme */
+  border-radius: 10px;             /* rounded corners */
+  text-decoration: none;           /* remove underline */
+  cursor: url('redpaw1.png'), pointer; /* red paw cursor */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-  /* Make the magnifying glass button bigger */
-#search {
-    width: 60px;          /* make the button wider */
-    height: 60px;         /* make it taller */
-    font-size: 30px;      /* make the ⌕ icon bigger */
-    border-radius: 50%;   /* make it a circle */
-    border: none;
-    background-color: rgb(204, 0, 0); /* match your red theme */
-    color: white;
-    cursor: url('redpaw1.png'), pointer; /* red paw cursor */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
+/* hover effect for the link */
+#website-link:hover {
+  background-color: rgb(170, 0, 0); /* darker red on hover */
+  transform: scale(1.05);           /* slight grow effect */
+}
+
   
   /* optional hover effect */
   #search:hover {
@@ -167,3 +165,12 @@ a, button, input[type="submit"], input[type="button"] {
     width: auto;          /* keep the aspect ratio */
   }
   
+  /* Style Terrier GPT link */
+.search p a {
+  color: #ffd700;          /* match your other FAQ links */
+  text-decoration: underline;
+}
+
+.search p a:hover {
+  color: #fff3d0;
+}
