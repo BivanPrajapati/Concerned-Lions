@@ -24,10 +24,10 @@ def extract_prereqs(course_name):
         return "COURSE_NOT_FOUND"
 
     match = re.search(
-        r'Prerequisites\s*:?\s*(.*?)\s*(?:-|\.|\n|$)',
-        description,
-        re.IGNORECASE | re.DOTALL
-    )
+    r'(?:Undergraduate\s+)?Prerequisites?\s*:?\s*(.+?)(?=\n|\.|\-|$)',
+    description,
+    re.IGNORECASE | re.DOTALL
+)
 
     if not match:
         # course exists, but has no prereqs
@@ -147,3 +147,4 @@ def hubs_used(course_list):
         course_list = [course_list]
     return get_hubs_for_courses(course_list)
 
+print(classes_used("ch110"))
