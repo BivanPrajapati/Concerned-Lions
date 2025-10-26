@@ -14,12 +14,27 @@
     text-align:center;
 
 }
-header{
-  
-    text-align: center;
+header {
+  position: relative;
+  top: 20px;
+  height: 10%;
+
+  display: flex;
+  /* put image + title on same line */
+  align-items: center;
+  /* vertically align them */
+  justify-content: flex-start;
+  /* keep them aligned to the left */
+  gap: 15px;
+  /* space between the dog and title */
+  padding-left: 20px;
+  /* little space from the left edge */
 }
 .big_text{
-    font-family: 'Montserrat',helvetica,sans-serif,serif,arial;
+  font-family: 'Montserrat', helvetica, sans-serif, serif, arial;
+  font-size: 50px;
+  /* bigger title */
+  font-weight: bold;
 }
 .small_text{
     font-family: 'Cambria',helvetica,sans-serif,serif,arial;
@@ -30,6 +45,8 @@ header{
     width:100%;
 }
 nav{
+  margin: 6% 0;
+  padding: 1% 0;
     background-color: rgb(204,0,0);
 
 }
@@ -143,5 +160,10 @@ a, button, input[type="submit"], input[type="button"] {
   #search:hover {
     background-color: rgb(170, 0, 0); /* darker red on hover */
     transform: scale(1.1);            /* slight grow effect */
+  }
+  
+  #dog-logo {
+    height: 60px;         /* fixed height — tweak this number as needed */
+    width: auto;          /* keep the aspect ratio */
   }
   

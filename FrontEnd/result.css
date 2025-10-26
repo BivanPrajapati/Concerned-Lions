@@ -101,3 +101,7 @@ nav a {
   a, button, input[type="submit"], input[type="button"] {
     cursor: url('redpaw1.png'), pointer;
   } 
+
+  #dog-logo {
+    max-height: 100%;
+}

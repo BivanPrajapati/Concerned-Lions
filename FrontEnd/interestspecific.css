@@ -13,9 +13,21 @@
     text-align:center;
 
 }
-header{
-    height:10%;
-    text-align: center;
+header {
+    position: relative;
+    top: 20px;
+    height: 10%;
+
+    display: flex;
+    /* put image + title on same line */
+    align-items: center;
+    /* vertically align them */
+    justify-content: flex-start;
+    /* keep them aligned to the left */
+    gap: 15px;
+    /* space between the dog and title */
+    padding-left: 20px;
+    /* little space from the left edge */
 }
 header h1{
     position:relative;
@@ -61,3 +73,8 @@ body {
   a, button, input[type="submit"], input[type="button"] {
     cursor: url('redpaw1.png'), pointer;
   } 
+
+  #dog-logo {
+    height: 60px;
+    width: auto;
+  }
