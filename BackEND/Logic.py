@@ -223,7 +223,7 @@ def parse_prereq_logic(prereq_text):
         return None
 
     return parse(prereq_text)
-def visualize_full_prereq_tree(course_name, return_buffer = False, save_path="../FrontEnd/src/prereq_tree.png"):
+def visualize_full_prereq_tree(course_name, return_buffer=False, save_path="../FrontEnd/src/prereq_tree.png"):
     import matplotlib.pyplot as plt
     import networkx as nx
     import io
@@ -234,8 +234,6 @@ def visualize_full_prereq_tree(course_name, return_buffer = False, save_path="..
 
     root = ws.normalize_course(course_name.strip()) or course_name.strip()
     prereq_string = extract_prereqs(root)
-
-    # --- Handle special cases first ---
     if prereq_string == "COURSE_NOT_FOUND" or not prereq_string:
         fig, ax = plt.subplots(figsize=(8, 4))
         ax.set_axis_off()
@@ -247,6 +245,7 @@ def visualize_full_prereq_tree(course_name, return_buffer = False, save_path="..
                     ha='center', va='center', fontsize=14, color='blue', weight='bold')
         fig.tight_layout()
         fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
+        plt.show()       # <-- display the figure
         plt.close(fig)
         return save_path
 
@@ -367,8 +366,3 @@ def visualize_full_prereq_tree(course_name, return_buffer = False, save_path="..
     fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
     plt.close(fig)
     return save_path
-
-
-# --- Example usage ---
-
-
