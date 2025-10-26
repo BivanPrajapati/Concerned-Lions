@@ -239,7 +239,6 @@ DEPT_MAPPING = {
 }
 def clean_text(text):
     return re.sub(r'\s+', ' ', text).strip()
-
 def normalize_course(course_name):
     """Normalize a course name to short form like cs112"""
     course_name = course_name.upper().replace("CAS", "").strip()
