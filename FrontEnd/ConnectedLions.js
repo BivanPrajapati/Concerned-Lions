@@ -54,8 +54,13 @@ async function generateTree() {
     formData.append("course_name", courseName);
 
     try {
+        // --- Determine the API URL (works both locally and on Vercel) ---
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? "http://127.0.0.1:8000/generate-tree"
+            : "/generate-tree";
+
         // --- Fetch PNG buffer from backend ---
-        const response = await fetch("http://127.0.0.1:8000/generate-tree", {
+        const response = await fetch(apiUrl, {
             method: "POST",
             body: formData
         });
@@ -76,7 +81,7 @@ async function generateTree() {
         console.error("Detailed fetch error:", err);
         resultsBox.innerHTML = `<p style="color:red;">
             ❌ Request failed: ${err.message}<br>
-            Make sure backend is running on <b>http://127.0.0.1:8000</b>
+            ${window.location.hostname === 'localhost' ? 'Make sure backend is running on <b>http://127.0.0.1:8000</b>' : 'Please try again'}
         </p>`;
     }
 }
