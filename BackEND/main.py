@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import Web_Scraping as ws
 import Logic as lg
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="BU Course Info API", version="1.0")
 
 
@@ -41,3 +43,12 @@ def course_info(request: CourseRequest):
 @app.get("/course-info")
 def course_info_get(course_name: str):
     return get_course_data(course_name)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace with your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
