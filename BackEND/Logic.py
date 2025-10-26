@@ -228,15 +228,38 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
     import networkx as nx
 
     root = ws.normalize_course(course_name.strip()) or course_name.strip()
+    prereq_string = extract_prereqs(root)
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.set_axis_off()
+
+    # --- Handle special cases ---
+    if prereq_string == "COURSE_NOT_FOUND":
+        ax.text(0.5, 0.5, f"{display_course(root)} is not available",
+                ha='center', va='center', fontsize=14, color='red', weight='bold')
+        fig.tight_layout()
+        fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
+        plt.close(fig)
+        print(f"❌ {display_course(root)} is not available. Saved plot to {save_path}")
+        return save_path
+
+    if not prereq_string:
+        ax.text(0.5, 0.5, f"{display_course(root)} has no prerequisites",
+                ha='center', va='center', fontsize=14, color='blue', weight='bold')
+        fig.tight_layout()
+        fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
+        plt.close(fig)
+        print(f"ℹ️ {display_course(root)} has no prerequisites. Saved plot to {save_path}")
+        return save_path
+
+    # --- Normal case ---
     G = nx.DiGraph()
     visited_courses = set()
 
-    # --- Build the graph recursively ---
     def add_structure(structure, parent=None):
         if structure is None:
             return
 
-        # If structure is a list with one element, just pass the element
         if isinstance(structure, list):
             if len(structure) == 1:
                 add_structure(structure[0], parent)
@@ -245,14 +268,13 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
 
         if isinstance(structure, tuple):
             logic, items = structure
-            # If tuple has only one item, bypass AND/OR node
             if len(items) == 1:
                 add_structure(items[0], parent)
                 return
             logic_node = f"{logic}_{len(G.nodes())}"
             G.add_node(logic_node, label=logic)
             if parent:
-                G.add_edge(parent, logic_node)  # parent -> logic
+                G.add_edge(parent, logic_node)
             for item in items:
                 add_structure(item, logic_node)
             return
@@ -267,26 +289,22 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
         if parent:
             G.add_edge(parent, course)
 
-        prereq_string = extract_prereqs(course)
-        if not prereq_string or prereq_string == "COURSE_NOT_FOUND":
-            return
-
-        logic_structure = parse_prereq_logic(prereq_string)
-        if logic_structure:
-            add_structure(logic_structure, course)
+        prereq_str = extract_prereqs(course)
+        if prereq_str and prereq_str != "COURSE_NOT_FOUND":
+            logic_structure = parse_prereq_logic(prereq_str)
+            if logic_structure:
+                add_structure(logic_structure, course)
 
     add_structure(root)
 
-    # --- Compute dynamic hierarchical positions ---
+    # --- Compute hierarchical positions ---
     def hierarchy_pos(G, root, vert_gap=3.0, x_min=0, x_max=1.0):
         pos = {}
-
         def subtree_width(node):
             children = list(G.successors(node))
             if not children:
                 return 1
             return sum(subtree_width(c) for c in children)
-
         def _assign(node, x_left, x_right, depth=0):
             children = list(G.successors(node))
             pos[node] = ((x_left + x_right) / 2, -depth * vert_gap)
@@ -300,7 +318,6 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
                 child_x_right = current_x + (x_right - x_left) * (w / total)
                 _assign(c, child_x_left, child_x_right, depth + 1)
                 current_x += (x_right - x_left) * (w / total)
-
         _assign(root, x_min, x_max)
         return pos
 
@@ -346,5 +363,5 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
 
 
 # --- Example usage ---
-path = visualize_full_prereq_tree("cs581")
+path = visualize_full_prereq_tree("cs330")
 print("Saved tree at:", path)
