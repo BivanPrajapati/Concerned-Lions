@@ -24,20 +24,20 @@ def extract_prereqs(course_name):
         return "COURSE_NOT_FOUND"
 
     match = re.search(
-    r'(?:Undergraduate\s+)?Prerequisites?\s*:?\s*(.+?)(?=\n|\.|\-|$)',
-    description,
-    re.IGNORECASE | re.DOTALL
-)
-
+        r'(?:Undergraduate\s+)?Prerequisite[s]?\s*:?\s*(.*?)(?=\s+-|$)',
+        description,
+        re.IGNORECASE | re.DOTALL
+    )
     if not match:
         # course exists, but has no prereqs
         return ""
 
     prereq_text = match.group(1)
-    prereq_text = ws.clean_text(prereq_text)
-    prereq_text = re.sub(r'\bCAS', '', prereq_text, flags=re.IGNORECASE)
-    prereq_text = normalize_separators(prereq_text)
+    prereq_text = ws.clean_text(prereq_text)   # keep your existing clean_text
+    prereq_text = re.sub(r'\bCAS\s*', '', prereq_text, flags=re.IGNORECASE)
+    prereq_text = clean_prereq_text(prereq_text)   # NEW STEP
     return prereq_text
+
 
 
 def extract_course_codes(prereq_string):
@@ -47,7 +47,6 @@ def extract_course_codes(prereq_string):
         codes.append(c1)
         codes.append(c2)
     return list(set(codes))
-
 
 def get_prereqs_for_courses(course_list, visited=None, level=0):
     if visited is None:
@@ -69,7 +68,7 @@ def get_prereqs_for_courses(course_list, visited=None, level=0):
         prereq_string = extract_prereqs(course)
 
         if prereq_string == "COURSE_NOT_FOUND":
-            results.append(f"{indent}{course_disp} (course not available)")
+            # Skip unavailable courses
             continue
 
         if prereq_string:
@@ -84,6 +83,26 @@ def get_prereqs_for_courses(course_list, visited=None, level=0):
 
     return results
 
+def clean_prereq_text(prereq_text):
+    # Remove parentheses entirely
+    prereq_text = re.sub(r'[\(\)]', '', prereq_text)
+
+    # Remove "GRS" prefix
+    prereq_text = re.sub(r'\bGRS\s+', '', prereq_text, flags=re.IGNORECASE)
+
+    # Replace slashes with " and "
+    prereq_text = re.sub(r'\s*/\s*', ' and ', prereq_text)
+
+    # Replace "&" with "and"
+    prereq_text = re.sub(r'\s*&\s*', ' and ', prereq_text)
+
+    # Normalize separators (commas, semicolons)
+    prereq_text = re.sub(r'\s*[,;]\s*', ' and ', prereq_text)
+
+    # Remove multiple spaces
+    prereq_text = re.sub(r'\s+', ' ', prereq_text).strip()
+
+    return prereq_text
 
 def classes_used(course_list):
     if isinstance(course_list, str):
@@ -147,4 +166,4 @@ def hubs_used(course_list):
         course_list = [course_list]
     return get_hubs_for_courses(course_list)
 
-print(classes_used("ch110"))
+print(hubs_used("wr152"))
