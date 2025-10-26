@@ -1,4 +1,4 @@
-let searchpop=document.getElementsById('search-popup')
+let searchpop=document.getElementsByClass('search-popup')
 function Search(){
     setInterval(drop_bar(), 1500)
 }

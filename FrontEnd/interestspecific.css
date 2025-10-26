@@ -40,3 +40,16 @@ nav a {
     text-align: center; /* If you want the text to be centered */
 }
 /* shared css for every page (end) */
+.search{
+    display:block;
+}
+#Go{
+    background-color: cyan;
+    color: white;
+    font-weight:bold;
+    font-size: calc(1px + 1vw);
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+}
+
