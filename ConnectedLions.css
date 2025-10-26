@@ -1,0 +1,129 @@
+/* shared css for every page (start) */
+/* === ABOUT US PAGE VARIANT UPDATED === */
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    cursor: url('paw1.png'), auto;
+    font-family: sans-serif, Serif, Arial;
+    color: white;
+    text-align: center;
+    font-size: calc(3px + 1vw);
+    background-color: rgb(45,41,38);
+}
+
+#page-wrapper {
+    margin: auto;
+    background-color: rgb(45,41,38);
+    min-height: 100vh;        /* make page scrollable if content exceeds viewport */
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    padding-left: 20px;
+    height: 15%;
+    position: relative;
+    top: 20px;
+}
+
+header h1 {
+    position: relative;
+    top: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    margin: 0;
+}
+
+#dog-logo {
+    height: 60px;
+    width: auto;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1;
+}
+
+nav {
+    margin: 6% 0;
+    padding: 1% 0;
+    background-color: rgb(204,0,0);
+}
+
+nav a {
+    float: left;
+    padding: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    width: 25%;
+    text-align: center;
+}
+
+/* shared css for every page (end) */
+
+/* The container class search - needed to position the dropup content */
+
+#main{
+    padding:5% 0;
+    color:#333;
+}
+#main h1{
+    color:azure;
+}
+.search-box{
+    width:500px;
+    background:#FFF;
+    margin: 100px auto 0;
+    border-radius: 5px;
+}
+.row{
+    display:flex;
+    align-items: center;
+    padding:10px 20px;
+
+}
+#input-box{
+    flex:1;
+    height:59px;
+    background:transparent;
+    border:0;
+    outline:0;
+    font-size:18px;
+    color:#333;
+}
+button{
+    background: transparent;
+    border:0;
+    outline:0;
+}
+button{
+    width:25px;
+    color:#555;
+    font-size:22px;
+    cursor:pointer;
+
+}
+::placeholder{
+    color:#130f0f;
+}
+.result-box ul{
+    border-top: 1px solid #999;
+    padding:15px 10px;
+}
+.result-box ul li{
+    list-style:none;
+    border-radius:3px;
+    padding:15px 10px;
+    cursor:pointer;
+}
