@@ -4,25 +4,25 @@
     margin: 0;
     box-sizing: border-box;
 }
+#page-wrapper{
+    margin:auto;
+    background-color:rgb(45,41,38);
+    height: 100%; /* change if the content exceeds brower's viewport */
+    color:white;
+    font-size:calc(3px+ 1vw);
+    font-family:sans-serif,Serif,Arial;
+    text-align:center;
 
-#page-wrapper {
-    margin: auto;
-    background-color: rgb(45, 41, 38);
-    min-height: 100vh;
-    color: white;
-    font-size: calc(3px + 1vw);
-    font-family: sans-serif, Serif, Arial;
+}
+header{
     text-align: center;
 }
 
-header {
-    height: 10%;
-    text-align: center;
+.big_text{
+    font-family: 'Montserrat',helvetica,sans-serif,serif,arial;
 }
-
-header h1 {
-    position: relative;
-    top: 20px;
+.small_text{
+    font-family: 'Cambria',helvetica,sans-serif,serif,arial;
 }
 
 #container {
@@ -41,10 +41,9 @@ nav a {
     color: white;
     text-decoration: none;
     font-size: 20px;
-    width: 25%;
-    text-align: center;
+    width: 25%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    text-align: center; /* If you want the text to be centered */
 }
-
 
 /* === Fonts === */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');

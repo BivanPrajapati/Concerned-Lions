@@ -14,19 +14,15 @@
     text-align:center;
 
 }
-.big-text{
-    font-family:'Montserrat',sans-serif,Serif,Arial;
-}
-.small-text{
-    font-family:'Cambria',sans-serif,Serif,Arial;
-}
 header{
-    height:10%;
+  
     text-align: center;
 }
-header h1{
-    position:relative;
-    top:20px;
+.big_text{
+    font-family: 'Montserrat',helvetica,sans-serif,serif,arial;
+}
+.small_text{
+    font-family: 'Cambria',helvetica,sans-serif,serif,arial;
 }
 #container{
     display:flex;
