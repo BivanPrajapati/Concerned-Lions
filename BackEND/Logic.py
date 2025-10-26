@@ -223,7 +223,7 @@ def parse_prereq_logic(prereq_text):
         return None
 
     return parse(prereq_text)
-def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
+def visualize_full_prereq_tree(course_name, return_buffer=False,save_path="../FrontEnd/src/prereq_tree.png"):
     import matplotlib.pyplot as plt
     import networkx as nx
 
@@ -355,13 +355,28 @@ def visualize_full_prereq_tree(course_name, save_path="prereq_tree.png"):
     ax.set_title(f"Full Prerequisite Tree with AND/OR for {display_course(root)}",
                  fontsize=16, pad=20)
     fig.tight_layout()
+    # --- ✅ THIS IS THE MAIN FIX ---
+    
+    # 1. Save to buffer *first* (if requested)
+    if return_buffer:
+        img_buf = io.BytesIO()
+        fig.savefig(img_buf, format='png', bbox_inches='tight', dpi=200)
+        img_buf.seek(0)
+
+    # 2. Save to file (optional, as your old code did)
+    # You can comment this out if you don't need a local file
     fig.savefig(save_path, format='png', bbox_inches='tight', dpi=200)
+
+    # 3. *Now* you can safely close the figure
     plt.close(fig)
-    print(f"✅ Full prerequisite tree saved to {save_path}")
-    return save_path
+
+    # 4. Return the buffer
+    if return_buffer:
+        return img_buf
+    
+    return save_path # Fallback
 
 
 
 # --- Example usage ---
-path = visualize_full_prereq_tree("cs330")
-print("Saved tree at:", path)
+visualize_full_prereq_tree("CS330")

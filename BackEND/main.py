@@ -15,7 +15,8 @@ class CourseRequest(BaseModel):
 def course_tree(request: CourseRequest):
     try:
         course_name = request.course_name
-        img_buf = lg.visualize_full_prereq_tree(course_name)
+        # Get the image buffer to stream back to the client
+        img_buf = lg.visualize_full_prereq_tree(course_name, return_buffer=True)
         return StreamingResponse(img_buf, media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating tree: {str(e)}")
@@ -23,7 +24,8 @@ def course_tree(request: CourseRequest):
 @app.get("/course-tree")
 def course_tree_get(course_name: str):
     try:
-        img_buf = lg.visualize_full_prereq_tree(course_name)
+        # Get the image buffer to stream back to the client
+        img_buf = lg.visualize_full_prereq_tree(course_name, return_buffer=True)
         return StreamingResponse(img_buf, media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
@@ -31,12 +33,12 @@ def course_tree_get(course_name: str):
 
 @app.post("/course-info")
 def course_info(request: CourseRequest):
-    return get_course_data(request.course_name)
+    return lg.classes_used(request.course_name)
 
 
 @app.get("/course-info")
 def course_info_get(course_name: str):
-    return get_course_data(course_name)
+    return lg.classes_used(course_name)
 
 
 app.add_middleware(
@@ -46,4 +48,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
