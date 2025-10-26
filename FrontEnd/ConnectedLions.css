@@ -68,6 +68,7 @@ nav a {
     font-size: 20px;
     width: 25%;
     text-align: center;
+    cursor: url('redpaw1.png'),pointer;
 }
 
 /* shared css for every page (end) */
@@ -111,7 +112,7 @@ button{
     width:25px;
     color:#555;
     font-size:22px;
-    cursor:pointer;
+    cursor: url('redpaw1.png'),pointer;
 
 }
 ::placeholder{
@@ -125,5 +126,5 @@ button{
     list-style:none;
     border-radius:3px;
     padding:15px 10px;
-    cursor:pointer;
+    cursor: url('redpaw1.png'),pointer;
 }

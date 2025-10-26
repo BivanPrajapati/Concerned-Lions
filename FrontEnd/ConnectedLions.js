@@ -1,5 +1,4 @@
-// --- Autocomplete Code (with fixes) ---
-let searchWords = ['AA', 'AR', 'AM', 'CS', 'DS', 'WR'];
+let searchWords=['WR','CS','AH','LY','LC','LF','LG','LH','LI','LK','LN','LP','AA','LX','BI','CH','PY','EE','BB','MS','MA','AN','SO','EC','PL','PS','IS','PH','RN','CL','HU','MU','TH','CI','EI','ME','CC']
 
 const resultsBox = document.querySelector(".result-box");
 const inputsBox = document.getElementById("input-box");
